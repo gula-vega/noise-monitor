@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noise Monitor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 300px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      color: #333;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    h1 .icon { font-size: 20px; }
+
+    p { margin-bottom: 10px; }
+
+    .section {
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .section h2 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #555;
+    }
+
+    .section ul {
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .section ul li { margin-bottom: 2px; }
+
+    .privacy {
+      font-size: 11px;
+      color: #888;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1><span class="icon">&#x1F50A;</span> Noise Monitor</h1>
+  <p>Monitors <em>your</em> microphone on Google Meet and Microsoft Teams, and warns you if you speak too loudly.</p>
+
+  <div class="section">
+    <h2>How to Use</h2>
+    <ul>
+      <li>Open a Google Meet or Microsoft Teams call.</li>
+      <li>Allow microphone access when prompted.</li>
+      <li>Adjust the <strong>Volume Threshold</strong> slider in the top-left corner of the call tab.</li>
+      <li>A red overlay appears when your voice exceeds the threshold.</li>
+      <li>Switch tabs freely &mdash; a red <strong>!</strong> badge and tab title warning keep you informed.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Tips</h2>
+    <ul>
+      <li>Default threshold is <strong>&minus;23&nbsp;dB</strong>.</li>
+      <li>Move the slider <em>left</em> (more negative) to be less sensitive.</li>
+      <li>Move the slider <em>right</em> (closer to 0) to be more sensitive.</li>
+      <li>Click <strong>ON/OFF</strong> to pause monitoring without uninstalling.</li>
+      <li>The overlay does not block clicks &mdash; you can still use your call normally.</li>
+    </ul>
+  </div>
+
+  <p class="privacy">
+    This extension processes audio <strong>locally only</strong>. No audio is recorded or transmitted. Your settings are synced via Chrome storage.
+  </p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

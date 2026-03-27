@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Noise Monitor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    h2 { font-size: 18px; margin-top: 28px; margin-bottom: 8px; }
+    p, ul { margin-bottom: 14px; }
+    ul { padding-left: 24px; }
+    .updated { font-size: 13px; color: #888; margin-bottom: 24px; }
+    strong { font-weight: 600; }
+    a { color: #1a73e8; }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy for Noise Monitor</h1>
+  <p class="updated">Last updated: March 2026</p>
+
+  <h2>What This Extension Does</h2>
+  <p>Noise Monitor is a Chrome browser extension that monitors your microphone volume during Google Meet and Microsoft Teams calls. When your voice exceeds a configurable threshold, the extension displays a visual warning on the page. Its sole purpose is to help you be aware of your speaking volume.</p>
+
+  <h2>Data Collection</h2>
+  <p><strong>We do not collect, record, store, or transmit any audio data.</strong></p>
+  <p>The extension accesses your microphone exclusively to compute a numeric volume level (in decibels). This computation happens entirely within your browser. The raw audio signal is never saved, buffered, or sent anywhere.</p>
+
+  <h2>What Is Stored</h2>
+  <p>The extension stores the following user preferences using Chrome's built-in storage API (<code>chrome.storage.sync</code>):</p>
+  <ul>
+    <li><strong>Volume threshold</strong> — the numeric dB value you set via the slider.</li>
+    <li><strong>Enabled state</strong> — whether monitoring is turned on or off.</li>
+    <li><strong>Panel collapsed state</strong> — whether the control panel is minimized.</li>
+  </ul>
+  <p>These values are simple numbers and booleans. They contain no personal information and are synced across your Chrome devices via your Google account (the same mechanism Chrome uses for bookmarks and settings).</p>
+
+  <h2>Permissions</h2>
+  <ul>
+    <li><strong>Microphone access</strong> — requested via the browser's standard permission prompt. Used solely to measure volume. You can revoke this at any time via your browser's site settings.</li>
+    <li><strong>Host access to meet.google.com, teams.microsoft.com, and teams.live.com</strong> — required to inject the volume monitoring UI into call pages. The extension does not access any other websites.</li>
+    <li><strong>Storage</strong> — used to save your preferences locally.</li>
+  </ul>
+
+  <h2>Third-Party Services</h2>
+  <p>This extension does not communicate with any external servers, APIs, or third-party services. There is no analytics, telemetry, advertising, or tracking of any kind.</p>
+
+  <h2>Data Sharing</h2>
+  <p>We do not share any data with third parties because we do not collect any data.</p>
+
+  <h2>Children's Privacy</h2>
+  <p>This extension does not knowingly collect any information from anyone, including children under 13.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>If this privacy policy is updated, the changes will be reflected on this page with an updated date. Since the extension collects no data, material changes are unlikely.</p>
+
+  <h2>Contact</h2>
+  <p>If you have questions about this privacy policy, please contact us at: <a href="mailto:m.gula@vegaitglobal.com">m.gula@vegaitglobal.com</a></p>
+
+  <h2>Open Source</h2>
+  <p>The complete source code for this extension is available for inspection. You can verify that no audio data is transmitted by reviewing the code yourself.</p>
+</body>
+</html>

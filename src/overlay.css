@@ -1,0 +1,446 @@
+/* ===== Control Panel (floating slider UI) ===== */
+
+#vol-control-panel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, rgba(20, 24, 45, 0.92), rgba(15, 30, 50, 0.92));
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  user-select: none;
+  transition: background 0.3s ease, padding 0.3s ease, min-width 0.3s ease,
+              box-shadow 0.3s ease, border-radius 0.3s ease;
+}
+
+#vol-control-panel:hover {
+  opacity: 1 !important;
+}
+
+/* Drag handle cursor on header */
+#vol-control-panel .vol-header {
+  cursor: grab;
+}
+
+#vol-control-panel .vol-header:active {
+  cursor: grabbing;
+}
+
+#vol-control-panel.dragging {
+  opacity: 0.85 !important;
+  transition: none !important;
+}
+
+/* ===== Header ===== */
+
+#vol-control-panel .vol-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* cursor set above in drag section */
+}
+
+#vol-control-panel .vol-title {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#vol-control-panel .vol-title-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+#vol-control-panel .vol-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ===== Toggle Button ===== */
+
+#vol-control-panel .vol-toggle-btn {
+  background: linear-gradient(135deg, #43a047, #66bb6a);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 10px;
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(67, 160, 71, 0.3);
+}
+
+#vol-control-panel .vol-toggle-btn:hover {
+  background: linear-gradient(135deg, #388e3c, #43a047);
+  transform: scale(1.04);
+}
+
+#vol-control-panel .vol-toggle-btn.off {
+  background: linear-gradient(135deg, #616161, #757575);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+#vol-control-panel .vol-toggle-btn.off:hover {
+  background: linear-gradient(135deg, #555, #666);
+}
+
+/* ===== Minimize Button ===== */
+
+#vol-control-panel .vol-minimize-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+#vol-control-panel .vol-minimize-btn:hover {
+  color: #fff;
+}
+
+/* ===== Body ===== */
+
+#vol-control-panel .vol-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity 0.2s ease;
+}
+
+#vol-control-panel label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+
+/* ===== Slider Row ===== */
+
+#vol-control-panel .vol-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#vol-control-panel input[type="range"] {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#vol-control-panel input[type="range"]:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#vol-control-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+#vol-control-panel input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+#vol-control-panel .vol-db-value {
+  min-width: 52px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== Live Level Display ===== */
+
+#vol-control-panel .vol-level-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#vol-control-panel .vol-level-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+}
+
+#vol-control-panel .vol-level-value {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #4caf50;
+  min-width: 52px;
+  text-align: right;
+  transition: color 0.2s ease;
+}
+
+#vol-control-panel .vol-level-value.warn {
+  color: #ff5252;
+}
+
+/* ===== Volume Meter ===== */
+
+#vol-control-panel .vol-meter {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+#vol-control-panel .vol-meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  transition: width 0.08s linear, background 0.25s ease;
+  background: linear-gradient(90deg, #43a047, #66bb6a);
+}
+
+#vol-control-panel .vol-meter-fill.warn {
+  background: linear-gradient(90deg, #ff9800, #f44336);
+}
+
+/* Threshold marker on meter */
+#vol-control-panel .vol-meter-threshold {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 1px;
+  pointer-events: none;
+  transition: left 0.15s ease;
+}
+
+/* ===== Status ===== */
+
+#vol-control-panel .vol-status {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+#vol-control-panel .vol-status.error {
+  color: #ff5252;
+}
+
+/* ===== Disabled state ===== */
+
+#vol-control-panel.disabled .vol-body {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ===== Minimized state ===== */
+
+#vol-control-panel.minimized .vol-body {
+  display: none;
+}
+
+#vol-control-panel.minimized {
+  min-width: auto;
+  padding: 7px 12px 7px 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 24, 45, 0.55),
+    rgba(15, 30, 50, 0.30)
+  );
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+}
+
+#vol-control-panel.minimized:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(20, 24, 45, 0.75),
+    rgba(15, 30, 50, 0.50)
+  );
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Hide the full title text, show only the icon */
+#vol-control-panel.minimized .vol-title-text {
+  display: none;
+}
+
+/* Show the status dot */
+#vol-control-panel.minimized .vol-status-dot {
+  display: block;
+}
+
+/* Hide slider-style toggle, show compact one */
+#vol-control-panel.minimized .vol-toggle-btn {
+  display: none;
+}
+
+#vol-control-panel.minimized .vol-header-actions {
+  gap: 4px;
+}
+
+#vol-control-panel.minimized .vol-minimize-btn {
+  font-size: 14px;
+  padding: 0 2px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+#vol-control-panel.minimized:hover .vol-minimize-btn {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== Status dot (visible only when minimized) ===== */
+
+#vol-control-panel .vol-status-dot {
+  display: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+  flex-shrink: 0;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+#vol-control-panel .vol-status-dot.off {
+  background: #777;
+  box-shadow: 0 0 4px rgba(119, 119, 119, 0.4);
+}
+
+#vol-control-panel .vol-status-dot.alerting {
+  background: #f44336;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.7);
+  animation: vol-dot-pulse 1s ease-in-out infinite;
+}
+
+@keyframes vol-dot-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(244, 67, 54, 0.5); }
+  50%      { box-shadow: 0 0 12px rgba(244, 67, 54, 0.9); }
+}
+
+/* ===== Red Warning Overlay ===== */
+
+#vol-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999998;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+#vol-overlay.visible {
+  opacity: 1;
+}
+
+/* Animated red vignette instead of flat tint */
+#vol-overlay .vol-overlay-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 0, 0.25) 100%);
+  animation: vol-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes vol-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* Top + bottom red bars for extra emphasis */
+#vol-overlay .vol-overlay-bar-top,
+#vol-overlay .vol-overlay-bar-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #f44336, transparent);
+}
+
+#vol-overlay .vol-overlay-bar-top    { top: 0; }
+#vol-overlay .vol-overlay-bar-bottom { bottom: 0; }
+
+#vol-overlay .vol-warning-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 700;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 18px 36px;
+  border-radius: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.4;
+  max-width: 80vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: vol-warning-in 0.3s ease-out forwards;
+  letter-spacing: 0.2px;
+}
+
+@keyframes vol-warning-in {
+  from {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+#vol-overlay .vol-warning-subtitle {
+  font-size: 0.55em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 6px;
+  letter-spacing: 0;
+}
