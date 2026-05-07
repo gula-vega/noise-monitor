@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Noise Monitor** is a Manifest V3 Chrome extension that monitors the user's microphone volume during Google Meet calls. When the user speaks above a configurable threshold, a red overlay with a warning appears on the Meet tab. All audio processing is local — no audio is recorded or transmitted.
+**QuietCue** (formerly "Noise Monitor") is a Manifest V3 Chrome extension that monitors the user's microphone volume during Google Meet and Microsoft Teams calls. The product is positioned as a gentle reminder for people who want to be mindful of colleagues, flatmates, or others sharing their space. When the user speaks above a configurable threshold, a red overlay cue appears on the call tab. All audio processing is local — no audio is recorded or transmitted.
 
 ## Architecture
 

@@ -1,8 +1,8 @@
-# Noise Monitor — Architecture Overview
+# QuietCue — Architecture Overview
 
 ## 1. System Summary
 
-Noise Monitor is a **Manifest V3 Chrome extension** that monitors the local user's microphone volume during Google Meet and Microsoft Teams browser calls. When volume exceeds a configurable threshold for a sustained duration, a red overlay warning appears on the call tab. If the user switches to another tab or window, alerts are surfaced via the extension badge and tab title. All audio processing is local — no audio is recorded or transmitted.
+QuietCue (formerly "Noise Monitor") is a **Manifest V3 Chrome extension** that monitors the local user's microphone volume during Google Meet and Microsoft Teams browser calls. When volume exceeds a configurable threshold for a sustained duration, a red overlay warning appears on the call tab. If the user switches to another tab or window, alerts are surfaced via the extension badge and tab title. All audio processing is local — no audio is recorded or transmitted.
 
 ## 2. Supported Platforms
 

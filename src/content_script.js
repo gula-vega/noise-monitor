@@ -1,43 +1,22 @@
-/**
- * Noise Monitor — Content Script
- *
- * Monitors the user's microphone volume via the Web Audio API and
- * shows a red overlay warning when the level exceeds a configurable
- * threshold.  All processing is local — no audio is recorded or sent.
- *
- * Supports Google Meet, Microsoft Teams (work), and Teams (personal).
- */
-
+/** QuietCue — Content Script. Local mic volume monitoring for Meet & Teams. */
 (() => {
   "use strict";
 
-  /* ------------------------------------------------------------------ */
-  /*  Constants                                                          */
-  /* ------------------------------------------------------------------ */
-
+  // --- Constants ---
   const DEFAULT_THRESHOLD_DB = -23;
   const SLIDER_MIN_DB = -60;
   const SLIDER_MAX_DB = 0;
   const FFT_SIZE = 2048;
   const POLL_INTERVAL_MS = 100;
-
-  /** How long (ms) the level must stay above threshold before the overlay shows */
-  const DEBOUNCE_ON_MS = 300;
-
-  /** How long (ms) the level must stay below threshold before the overlay hides */
-  const DEBOUNCE_OFF_MS = 1000;
-
+  const DEBOUNCE_ON_MS = 300;   // ms above threshold before overlay shows
+  const DEBOUNCE_OFF_MS = 1000; // ms below threshold before overlay hides
   const STORAGE_KEY = "threshold";
   const ENABLED_KEY = "enabled";
   const MINIMIZED_KEY = "minimized";
   const POSITION_KEY = "panelPosition";
-
   const TITLE_PREFIX = "\u26A0 LOUD - ";
 
-  /* ------------------------------------------------------------------ */
-  /*  State                                                              */
-  /* ------------------------------------------------------------------ */
-
+  // --- State ---
   let thresholdDb = DEFAULT_THRESHOLD_DB;
   let enabled = true;
   let audioContext = null;
@@ -45,41 +24,20 @@
   let timeDomainData = null;
   let pollTimer = null;
   let micStream = null;
-
-  /** Timestamp when continuous loud speaking started (null = not loud) */
   let loudStartTime = null;
   let overlayVisible = false;
   let overlayOffTimer = null;
-
-  /** Original page title captured when alert starts */
   let originalTitle = null;
 
-  /* ------------------------------------------------------------------ */
-  /*  DOM References (created in buildUI)                                */
-  /* ------------------------------------------------------------------ */
+  // --- DOM refs (set in buildUI) ---
+  let controlPanel = null, overlayEl = null, sliderEl = null;
+  let dbValueEl = null, meterFillEl = null, meterThresholdEl = null;
+  let levelValueEl = null, statusEl = null, statusDotEl = null;
+  let toggleBtn = null, minBtn = null;
 
-  let controlPanel = null;
-  let overlayEl = null;
-  let sliderEl = null;
-  let dbValueEl = null;
-  let meterFillEl = null;
-  let meterThresholdEl = null;
-  let levelValueEl = null;
-  let statusEl = null;
-  let statusDotEl = null;
-  let toggleBtn = null;
-  let minBtn = null;
+  // --- Audio Processing ---
 
-  /* ================================================================== */
-  /*  Audio Processing                                                   */
-  /* ================================================================== */
-
-  /**
-   * Compute the RMS of the current analyser time-domain buffer and
-   * convert to dBFS.
-   *
-   * @returns {number} Level in dBFS (negative; 0 = max).
-   */
+  /** Compute RMS of analyser buffer -> dBFS (negative; 0 = max). */
   function measureLevel() {
     analyser.getFloatTimeDomainData(timeDomainData);
 
@@ -95,9 +53,7 @@
     return 20 * Math.log10(rms);
   }
 
-  /* ================================================================== */
-  /*  Tab Title Manager (ADR-006)                                        */
-  /* ================================================================== */
+  // --- Tab Title Manager (ADR-006) ---
 
   function setTitleAlerting() {
     if (originalTitle === null) {
@@ -115,21 +71,17 @@
     }
   }
 
-  /* ================================================================== */
-  /*  Badge Messaging (ADR-006)                                          */
-  /* ================================================================== */
+  // --- Badge Messaging (ADR-006) ---
 
   function sendAlertState(alerting) {
     try {
-      chrome.runtime.sendMessage({ type: "VOLUME_ALERT_STATE", alerting });
+      chrome.runtime.sendMessage({ type: "VOLUME_ALERT_STATE", alerting }).catch(() => {});
     } catch (_) {
-      // Service worker may be inactive; badge state persists natively
+      // Service worker may be inactive
     }
   }
 
-  /* ================================================================== */
-  /*  Overlay Toggle with Debounce                                       */
-  /* ================================================================== */
+  // --- Overlay Toggle with Debounce ---
 
   function showOverlay() {
     if (overlayEl) overlayEl.classList.add("visible");
@@ -147,10 +99,7 @@
     sendAlertState(false);
   }
 
-  /**
-   * Called every POLL_INTERVAL_MS.  Measures the current level, updates
-   * the meter, and applies debounce logic for the red overlay.
-   */
+  /** Main polling loop — runs every POLL_INTERVAL_MS. */
   function tick() {
     if (!enabled) {
       if (overlayVisible) hideOverlay();
@@ -210,9 +159,7 @@
     }
   }
 
-  /* ================================================================== */
-  /*  Mic Initialization                                                 */
-  /* ================================================================== */
+  // --- Mic Initialization ---
 
   async function initMic() {
     try {
@@ -246,9 +193,7 @@
     if (sliderEl) sliderEl.disabled = true;
   }
 
-  /* ================================================================== */
-  /*  Storage                                                            */
-  /* ================================================================== */
+  // --- Storage ---
 
   function loadSettings() {
     chrome.storage.sync.get([STORAGE_KEY, ENABLED_KEY, MINIMIZED_KEY, POSITION_KEY], (result) => {
@@ -297,9 +242,7 @@
     chrome.storage.sync.set({ [POSITION_KEY]: { x, y } });
   }
 
-  /* ================================================================== */
-  /*  UI Construction                                                    */
-  /* ================================================================== */
+  // --- UI Construction ---
 
   function updateDbLabel() {
     if (dbValueEl) {
@@ -340,7 +283,8 @@
       <div class="vol-header">
         <span class="vol-title">
           <img class="vol-title-icon" src="${iconUrl}" alt="" />
-          Noise Monitor
+          <span class="vol-title-text">QuietCue</span>
+          <span class="vol-status-dot" title="Monitoring"></span>
         </span>
         <div class="vol-header-actions">
           <button class="vol-toggle-btn" aria-label="Toggle monitoring on or off">ON</button>
@@ -361,6 +305,11 @@
           />
           <span class="vol-db-value" id="vol-db-value">${thresholdDb} dB</span>
         </div>
+        <div class="vol-slider-hints">
+          <span>&#9664; More sensitive</span>
+          <span>Less sensitive &#9654;</span>
+        </div>
+        <div class="vol-recommended">Recommended: ${DEFAULT_THRESHOLD_DB} dB</div>
         <div class="vol-level-row">
           <span class="vol-level-label">Level</span>
           <span class="vol-level-value" id="vol-level-value">-- dB</span>
@@ -382,6 +331,7 @@
     meterThresholdEl = controlPanel.querySelector(".vol-meter-threshold");
     levelValueEl = controlPanel.querySelector("#vol-level-value");
     statusEl = controlPanel.querySelector(".vol-status");
+    statusDotEl = controlPanel.querySelector(".vol-status-dot");
 
     /* --- Slider event --- */
     sliderEl.addEventListener("input", () => {
@@ -402,11 +352,12 @@
     minBtn = controlPanel.querySelector(".vol-minimize-btn");
     minBtn.addEventListener("click", () => {
       const isMinimized = controlPanel.classList.toggle("minimized");
-      minBtn.innerHTML = isMinimized
-        ? '<img src="' + iconUrl + '" alt="Expand" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;">'
-        : "\u2212";
+      minBtn.textContent = isMinimized ? "+" : "\u2212";
       saveMinimized(isMinimized);
     });
+
+    /* --- Drag to move --- */
+    initDrag();
 
     /* --- Red Overlay --- */
     overlayEl = document.createElement("div");
@@ -426,9 +377,65 @@
     document.body.appendChild(overlayEl);
   }
 
-  /* ================================================================== */
-  /*  Cleanup                                                            */
-  /* ================================================================== */
+  // --- Drag to Move ---
+
+  function initDrag() {
+    const header = controlPanel.querySelector(".vol-header");
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let panelStartX = 0;
+    let panelStartY = 0;
+    let hasMoved = false;
+
+    header.addEventListener("mousedown", (e) => {
+      // Don't drag when clicking buttons
+      if (e.target.closest("button")) return;
+
+      isDragging = true;
+      hasMoved = false;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+
+      const rect = controlPanel.getBoundingClientRect();
+      panelStartX = rect.left;
+      panelStartY = rect.top;
+
+      controlPanel.classList.add("dragging");
+      e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+
+      if (!hasMoved && Math.abs(dx) < 3 && Math.abs(dy) < 3) return;
+      hasMoved = true;
+
+      const maxX = window.innerWidth - controlPanel.offsetWidth;
+      const maxY = window.innerHeight - controlPanel.offsetHeight;
+      const newX = Math.max(0, Math.min(panelStartX + dx, maxX));
+      const newY = Math.max(0, Math.min(panelStartY + dy, maxY));
+
+      controlPanel.style.left = newX + "px";
+      controlPanel.style.top = newY + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+      controlPanel.classList.remove("dragging");
+
+      if (hasMoved) {
+        const rect = controlPanel.getBoundingClientRect();
+        savePosition(rect.left, rect.top);
+      }
+    });
+  }
+
+  // --- Cleanup ---
 
   function cleanup() {
     if (pollTimer) {
@@ -443,9 +450,7 @@
     sendAlertState(false);
   }
 
-  /* ================================================================== */
-  /*  Bootstrap                                                          */
-  /* ================================================================== */
+  // --- Bootstrap ---
 
   function init() {
     buildUI();

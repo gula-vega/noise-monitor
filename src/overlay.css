@@ -189,6 +189,22 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* ===== Slider Hints ===== */
+
+#vol-control-panel .vol-slider-hints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: -2px;
+}
+
+#vol-control-panel .vol-recommended {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+
 /* ===== Live Level Display ===== */
 
 #vol-control-panel .vol-level-row {
@@ -377,17 +393,17 @@
   opacity: 1;
 }
 
-/* Animated red vignette instead of flat tint */
+/* Animated red vignette — strong red tint */
 #vol-overlay .vol-overlay-bg {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 0, 0.25) 100%);
-  animation: vol-pulse 1.8s ease-in-out infinite;
+    radial-gradient(ellipse at center, rgba(255, 0, 0, 0.18) 0%, rgba(255, 0, 0, 0.45) 100%);
+  animation: vol-pulse 1.6s ease-in-out infinite;
 }
 
 @keyframes vol-pulse {
-  0%, 100% { opacity: 0.7; }
+  0%, 100% { opacity: 0.75; }
   50%      { opacity: 1; }
 }
 

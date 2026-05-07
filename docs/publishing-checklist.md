@@ -25,7 +25,7 @@
   - Marquee: 1400x560 px
 
 ### Text
-- [x] Extension name: "Noise Monitor — Mic Volume Alert for Meet & Teams"
+- [x] Extension name: "QuietCue — Mic Volume Alert for Meet & Teams"
 - [x] Short description (see `docs/store-listing.md`)
 - [x] Detailed description (see `docs/store-listing.md`)
 - [x] Category: Productivity or Communication
@@ -40,7 +40,7 @@
 Before packaging, verify `src/manifest.json` has:
 
 - [x] `"manifest_version": 3`
-- [ ] `"name"` updated to `"Noise Monitor"`
+- [ ] `"name"` updated to `"QuietCue — Mic Volume Alert for Meet & Teams"`
 - [ ] `"description"` updated to mention Meet + Teams
 - [ ] `"version"` set to target release version
 - [ ] `"host_permissions"` includes all three domains:
